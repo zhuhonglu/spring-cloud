@@ -1,0 +1,36 @@
+eureka:
+  instance:
+    # eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    leaseRenewalIntervalInSeconds: 10
+    metadata-map:
+          management.context-path: ${server.context-path}${management.context-path}
+          user.name: ${security.user.name}
+          user.password: ${security.user.password}
+    statusPageUrlPath: ${server.context-path}${management.context-path}/info
+    healthCheckUrlPath: ${server.context-path}${management.context-path}/health
+  client:
+    #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registryFetchIntervalSeconds: 5
+
+management:
+  security:
+    roles: SUPERUSER
+  context-path: /manage
+
+
+
+
+#  zipkin:
+#    base-url: http://localhost:9411
+
+
+spring:
+  cloud:
+    config:
+      enabled: false
+#  cloud:
+#    config:
+#      profile: dev
+#      discovery:
+#        enabled: true
+#        service-id: service-config

@@ -1,0 +1,67 @@
+druid:
+      url: jdbc:mysql://localhost:3306/hap_dev?characterEncoding=utf8&useSSL=true
+      driver-class: com.mysql.jdbc.Driver
+      username: hap_dev
+      password: hap_dev
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      filters: stat,wall,slf4j
+redis:
+    host: localhost
+    port: 6379
+
+
+server:
+      port: 8082
+      #请求应用名，必须与spring.application.name保持一致。
+
+      #servlet:
+       # context-path: /protal
+
+spring:
+  application:
+      name: portal
+  mvc:
+      view:
+        prefix: /
+        suffix: .html
+  resources:
+       static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/templates/
+
+eureka:
+  instance:
+    #使用ip
+#    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  client:
+  #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registryFetchIntervalSeconds: 5
+    healthcheck:
+          enabled: true
+    serviceUrl:
+      defaultZone: http://admin:admin@localhost:8761/eureka-server/eureka/
+
+mybatis:
+  type-aliases-package: com.itl.iap
+  mapper-locations: classpath:mapper/*.xml
+  mappers: com.itl.iap.dao.**
+  configuration-properties:
+    offsetAsPageNum: true
+    rowBoundsWithCount: true
+    reasonable: true
+#mybatis配置
+mybatis-plus:
+  global-config:
+    id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
+    db-column-underline: false
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true #配置的缓存的全局开关
+    lazyLoadingEnabled: true #延时加载的开关
+    multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
+
+

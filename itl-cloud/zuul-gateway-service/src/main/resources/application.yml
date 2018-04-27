@@ -1,0 +1,59 @@
+spring:
+  application:
+      name: zuul-gateway-service
+#  cloud:
+#    config:
+#      uri: http://${config.host:192.168.1.140}:${config.port:8888}
+
+server:
+  port: 8012
+
+eureka:
+  instance:
+    #使用ip
+#    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  client:
+  #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registryFetchIntervalSeconds: 5
+    healthcheck:
+          enabled: true
+    serviceUrl:
+      defaultZone: http://admin:admin@localhost:8761/eureka-server/eureka/
+
+
+
+zuul:
+#来忽略所有的默认路由
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+  routes:
+    api-service:
+      path: /api-oauth2/**
+      sensitiveHeaders:
+      serviceId: oauth2-service
+    api-core:
+      path: /api-core/**
+      sensitiveHeaders:
+      serviceId: iap-core
+    portal:
+      path: /api-portal/**
+      sensitiveHeaders:
+      serviceId: portal
+
+
+  add-proxy-headers: true
+
+security:
+  oauth2:
+    client:
+      access-token-uri: http://localhost:8100/oauth2-service/oauth/token
+      user-authorization-uri: http://localhost:8100/oauth2-service/oauth/authorize
+      client-id: webapp
+    resource:
+      user-info-uri: http://localhost:8100/oauth2-service/user
+      prefer-token-info: false
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 70000

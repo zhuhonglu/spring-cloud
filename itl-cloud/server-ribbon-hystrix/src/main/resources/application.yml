@@ -1,0 +1,77 @@
+eureka:
+  instance:
+    #使用ip
+#    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:8761/eureka-server/eureka/
+server:
+  port: 8011
+  #请求应用名，必须与spring.application.name保持一致。
+  context-path: /server-ribbon-hystrix
+
+spring:
+  application:
+    name: server-ribbon-hystrix
+  profiles:
+     active: @environment@
+
+#Feign使用Hystrix无效原因及解决方法加如下
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  threadpool:
+    BaseThreadPool:
+      coreSize: 200 #线程请求池大小  (50) * 0.3 + 5 = 20  计算方法：每秒最大支撑的请求数 * (99%请求的平均响应时间 ) + 缓冲值 默认10
+      maxQueueSize: 700 #BlockingQueue的最大队列数
+      queueSizeRejectionThreshold: 500 #即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
+      allowMaximumSizeToDivergeFromCoreSize: true #生效maximumSize 默认false，设置coreSize小于maximumSize会创建一个线程池，该线程池可以维持最大的并发性，但是在相对不活动的期间会将线程返回给系统。(主题keepAliveTimeInMinutes)
+      keepAliveTimeMinutes: 1 # coreSize < maximumSize 线程空闲时间（分钟） 默认1
+      maximumSize: 300 #线程池最大大小 默认10  空闲时候释放
+    default:
+      coreSize: 10 #线程请求池大小  (50) * 0.3 + 5 = 20  计算方法：每秒最大支撑的请求数 * (99%请求的平均响应时间 ) + 缓冲值 默认10
+#      maxQueueSize: 200 #BlockingQueue的最大队列数
+#      queueSizeRejectionThreshold: 50 #即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
+#      allowMaximumSizeToDivergeFromCoreSize: true #生效maximumSize 默认false，设置coreSize小于maximumSize会创建一个线程池，该线程池可以维持最大的并发性，但是在相对不活动的期间会将线程返回给系统。(主题keepAliveTimeInMinutes)
+#      keepAliveTimeMinutes: 1 # coreSize < maximumSize 线程空闲时间（分钟） 默认1
+#      maximumSize: 200 #线程池最大大小 默认10  空闲时候释放
+  command:
+    default:
+      execution:
+#        timeout:
+#          enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000  #断路器的超时时间需要大于ribbon的超时时间，不然不会触发重试。
+    circuitBreaker:
+      requestVolumeThreshold: 20  #10s 当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+      sleepWindowInMilliseconds: 5000 #短路多久以后开始尝试是否恢复，默认5s
+      errorThresholdPercentage: 50 #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+    metrics:
+      rollingStats:
+        timeInMilliseconds: 13000 #统计滑动窗口的时间,控制circuit break的打开 默认10000  这是为线程池保留了多长时间的度量。
+      rollingPercentile:
+        timeInMilliseconds: #计算百分比的窗口时间 默认60000
+      healthSnapshot:
+        intervalInMilliseconds: 800 #记录health 快照（用来统计成功和错误绿）的间隔 默认500
+
+
+server-ribbon-hystrix.ribbon:
+  ConnectTimeout: 4000 #请求连接的超时时间
+  ReadTimeout: 4000 #请求处理的超时时间
+  OkToRetryOnAllOperations: true #对所有操作请求都进行重试
+  MaxAutoRetriesNextServer: 1 #切换实例的重试次数
+  MaxAutoRetries: 1 #对当前实例的重试次数
+
+spring.cloud.loadbalancer.retry.enabled: true
+
+security:
+  user:
+    name: @monitor.user@
+    password: @monitor.pwd@
+  basic:
+    path: ${management.context-path}
+

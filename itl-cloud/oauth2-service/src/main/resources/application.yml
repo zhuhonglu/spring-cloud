@@ -1,0 +1,56 @@
+druid:
+      url: jdbc:mysql://localhost:3306/hap_dev?characterEncoding=utf8&useSSL=true
+      driver-class: com.mysql.jdbc.Driver
+      username: hap_dev
+      password: hap_dev
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      filters: stat,wall,slf4j
+redis:
+    host: localhost
+    port: 6379
+
+
+server:
+      port: 8100
+      #请求应用名，必须与spring.application.name保持一致。
+
+spring:
+  application:
+      name: oauth2-service
+   # cloud:
+    # config:
+     #      discovery:
+       #      enabled: true
+        #     service-id: microservice-config-service
+         #  label: master
+          # profile: prod
+eureka:
+  instance:
+    #使用ip
+#    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  client:
+  #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registryFetchIntervalSeconds: 5
+    healthcheck:
+          enabled: true
+    serviceUrl:
+      defaultZone: http://admin:admin@localhost:8761/eureka-server/eureka/
+
+security:
+   oauth2:
+      resource:
+        filter-order: 3
+mybatis:
+  type-aliases-package: com.itl.iap
+  mapper-locations: classpath:mapper/*.xml
+  mappers: com.itl.iap.dao.**
+  configuration-properties:
+    offsetAsPageNum: true
+    rowBoundsWithCount: true
+    reasonable: true
+
+

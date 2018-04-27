@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: @environment@
+
+#添加鉴权拦截
+security:
+  user:
+    name: @monitor.user@
+    password: @monitor.pwd@
+  basic:
+    enabled: true
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+    leaseRenewalIntervalInSeconds: 10 #eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+  server:
+      # see discussion about enable-self-preservation:
+      # https://github.com/jhipster/generator-jhipster/issues/3654
+#      enable-self-preservation: false
+      registry-sync-retry-wait-ms: 500 # 当eureka服务器启动时获取其他服务器的注册信息失败时，会再次尝试获取，期间需要等待的时间，默认为30 * 1000毫秒
+      a-sgcache-expiry-timeout-ms: 60000 #缓存ASG信息的到期时间，单位为毫秒，默认为10 * 60 * 1000
+      eviction-interval-timer-in-ms: 30000 # 过期实例应该启动并运行的时间间隔，单位为毫秒，默认为60 * 1000
+      registry-eureka-nodes-update-interval-ms: 30000
+      renewal-threshold-update-interval-ms: 15000 #阈值更新的时间间隔，单位为毫秒，默认为15 * 60 * 1000

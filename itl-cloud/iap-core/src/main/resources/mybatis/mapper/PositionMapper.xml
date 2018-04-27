@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itl.iap.timer.mapper.PositionMapper">
+    <resultMap id="BaseResultMap" type="com.itl.iap.timer.dao.Position">
+        <id column="POSITION_ID" property="positionId" jdbcType="DECIMAL"/>
+        <result column="UNIT_ID" property="unitId" jdbcType="DECIMAL"/>
+        <result column="UNIT_NAME" property="unitName" jdbcType="VARCHAR"/>
+        <result column="POSITION_CODE" property="positionCode" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+        <result column="PARENT_POSITION_ID" property="parentPositionId" jdbcType="DECIMAL"/>
+        <result column="PARENT_POSITION_NAME" property="parentPositionName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    POSITION_ID, UNIT_ID, POSITION_CODE,NAME,DESCRIPTION,PARENT_POSITION_ID
+  </sql>
+    <select id="getPositionByCode" resultMap="BaseResultMap">
+        SELECT *FROM
+            hr_org_position_b p
+    </select>
+</mapper>

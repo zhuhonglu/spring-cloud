@@ -1,0 +1,16 @@
+#单机注册中心
+
+server:
+  port: 8761
+  context-path: /eureka-server
+
+spring:
+#  profiles: localhost
+  application:
+    name: registry
+eureka:
+#  instance:
+#    hostname: localhost
+  client:
+      fetch-registry: false   #单机需要配置为flase
+      register-with-eureka: false  #单机需要配置为flase

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="iap-core:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="iap-core.war">
+      <element id="artifact" artifact-name="iap-core:war exploded" />
+    </root>
+  </artifact>
+</component>

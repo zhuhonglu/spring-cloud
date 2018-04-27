@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.itl.iap</groupId>
+	<artifactId>itl-cloud</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.6.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- 针对权限监控，做用户权限拦截，需要的用户名和密码。 -->
+				<monitor.user>admin</monitor.user>
+				<monitor.pwd>admin</monitor.pwd>
+				<environment>dev</environment>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<!-- 针对权限监控，做用户权限拦截，需要的用户名和密码。 -->
+				<monitor.user>admin</monitor.user>
+				<monitor.pwd>admin</monitor.pwd>
+				<environment>test</environment>
+			</properties>
+		</profile>
+		<!-- 预生产 -->
+		<profile>
+			<id>preProd</id>
+			<properties>
+				<!-- 针对权限监控，做用户权限拦截，需要的用户名和密码。 -->
+				<monitor.user>admin</monitor.user>
+				<monitor.pwd>admin</monitor.pwd>
+				<environment>preProd</environment>
+			</properties>
+		</profile>
+		<profile>
+			<id>sit</id>
+			<properties>
+				<!-- 针对权限监控，做用户权限拦截，需要的用户名和密码。 -->
+				<monitor.user>admin</monitor.user>
+				<monitor.pwd>admin</monitor.pwd>
+				<environment>sit</environment>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<!-- 针对权限监控，做用户权限拦截，需要的用户名和密码。 -->
+				<monitor.user>admin</monitor.user>
+				<monitor.pwd>1qaz!QAZ</monitor.pwd>
+				<environment>prod</environment>
+			</properties>
+		</profile>
+
+	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Dalston.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>1.0.29</version>
+			</dependency>
+			<!-- Mybatis 开发包 -->
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>1.3.0</version>
+			</dependency>
+			<!-- Mybatis 和Spring的 整合包，是mybatis出的 -->
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>3.4.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.16.8</version>
+			</dependency>
+			<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+			<!-- dom4j 解析 XML文件的包 -->
+			<dependency>
+				<groupId>dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>1.6.1</version>
+			</dependency>
+			<!-- xstream:xml/对象互转工具 -->
+			<dependency>
+				<groupId>com.thoughtworks.xstream</groupId>
+				<artifactId>xstream</artifactId>
+				<version>1.4.10</version>
+			</dependency>
+
+			<!-- JSON lib 开发包 以及它的依赖包 -->
+			<dependency>
+				<groupId>net.sf.json-lib</groupId>
+				<artifactId>json-lib</artifactId>
+				<classifier>jdk15</classifier>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>com.googlecode.json-simple</groupId>
+				<artifactId>json-simple</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.8.3</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.6</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.9</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.ezmorph</groupId>
+				<artifactId>ezmorph</artifactId>
+				<version>1.0.5</version>
+			</dependency>
+
+
+			<!-- pio.jar 邮件导出 -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.8</version>
+			</dependency>
+			<!-- poi插件 -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>3.8</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>1.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>1.1.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper</artifactId>
+				<version>5.0.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>2.8.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.esotericsoftware.kryo</groupId>
+				<artifactId>kryo</artifactId>
+				<version>2.24.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>de.javakaffee</groupId>
+				<artifactId>kryo-serializers</artifactId>
+				<version>0.27</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.wondertek.store</groupId>
+				<artifactId>store-model</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.wondertek.store</groupId>
+				<artifactId>store-cache</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.wondertek.store</groupId>
+				<artifactId>store-core</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.ryantenney.metrics</groupId>
+				<artifactId>metrics-spring</artifactId>
+				<version>3.1.3</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard.metrics</groupId>
+				<artifactId>metrics-core</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard.metrics</groupId>
+				<artifactId>metrics-annotation</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard.metrics</groupId>
+				<artifactId>metrics-json</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard.metrics</groupId>
+				<artifactId>metrics-jvm</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard.metrics</groupId>
+				<artifactId>metrics-servlet</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard.metrics</groupId>
+				<artifactId>metrics-servlets</artifactId>
+				<version>3.2.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>2.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>2.6.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-starter-client</artifactId>
+				<version>1.5.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.bull.javamelody</groupId>
+				<artifactId>javamelody-core</artifactId>
+				<version>1.68.1</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+
+	<modules>
+		<module>eureka-server</module>
+		<module>service-turbine</module>
+		<module>server-zipkin</module>
+		<module>service-monitor</module>
+		<module>portal</module>
+		<module>server-ribbon-hystrix</module>
+		<module>zuul-gateway-service</module>
+		<module>oauth2-service</module>
+		<module>iap-core</module>
+		<module>web-html</module>
+		<module>config-server</module>
+	</modules>
+
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+</project>

@@ -1,0 +1,51 @@
+#读取本地配置如下
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config
+  profiles:
+     active: native
+  application:
+     name: config-server
+#读取svn地址配置
+server:
+  port: 8888
+
+#spring:
+#   application:
+#      name: config-server
+#   cloud:
+#      config:
+#         server:
+#            svn:
+#              uri: svn://47.98.133.78/repo/config-repo     # 配置svn仓库的地址
+#              search-paths: config-repo                             # svn仓库地址下的相对地址，可以配置多个，用,分割。
+#              username: luzhuhong                                          # svn仓库的账号
+#              password: 123456                                   # svn仓库的密码
+#             #basedir:  classpath:/svnconfig
+#            default-label: trunk
+#     profiles:
+#         active: subversion
+
+eureka:
+  instance:
+    #使用ip
+#    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  client:
+  #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registryFetchIntervalSeconds: 5
+    healthcheck:
+        enabled: true
+    serviceUrl:
+      defaultZone: http://admin:admin@localhost:8761/eureka-server/eureka/
+
+
+security:
+  basic:
+    enabled: false               #  开启基于HTTP basic的认证
+ # user:
+ #   name: admin                  # 配置登录的账号是user
+  #  password: admin              # 配置登录的密码是password123

@@ -1,0 +1,37 @@
+eureka:
+  instance:
+    #使用ip
+#    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:8761/eureka-server/eureka/
+server:
+  port: 8001
+  #请求应用名，必须与spring.application.name保持一致。
+
+
+spring:
+  application:
+    name: iap-core
+  messages:
+          basename: i18n/messages
+  profiles:
+     active: @environment@
+
+
+
+security:
+  user:
+    name: @monitor.user@
+    password: @monitor.pwd@
+  basic:
+    path: ${management.context-path}
+
+
+
+#此处的路径需要和log-back.xml中的路径一致。
+#endpoints:
+#  logfile:
+#    enabled: true # Enable the endpoint.
+#    external-file: ${logback.logfile.path}/TimeBasedRolling.log

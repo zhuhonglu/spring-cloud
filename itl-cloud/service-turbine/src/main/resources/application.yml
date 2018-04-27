@@ -1,0 +1,45 @@
+spring:
+  application.name: service-turbine
+  cloud:
+    config:
+      enabled: false
+  profiles:
+       active: @environment@
+  boot:
+    client:
+      metadata:
+        user.name: ${security.user.name}         #These two are needed so that the server
+        user.password:  ${security.user.password} #can access the proteceted client endpoints
+
+
+server:
+  port: 8770
+  context-path: /service-turbine
+turbine:
+  instanceUrlSuffix:
+    default: store-api/manage/hystrix.stream
+  aggregator:
+    clusterConfig: default   # 指定聚合哪些集群，多个使用","分割，默认为default。可使用http://.../turbine.stream?cluster={clusterConfig之一}访问
+  appConfig: store-api  # ## 配置Eureka中的serviceId列表，表明监控哪些服务
+  clusterNameExpression: new String("default")
+
+  # 1. clusterNameExpression指定集群名称，默认表达式appName；此时：turbine.aggregator.clusterConfig需要配置想要监控的应用名称
+  # 2. 当clusterNameExpression: default时，turbine.aggregator.clusterConfig可以不写，因为默认就是default
+  # 3. 当clusterNameExpression: metadata['cluster']时，假设想要监控的应用配置了eureka.instance.metadata-map.cluster: ABC，则需要配置，同时turbine.aggregator.clusterConfig: ABC
+eureka:
+  instance:
+    #使用ip
+    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:8761/eureka-server/eureka/
+      
+      
+security:
+  user:
+    name: @monitor.user@
+    password: @monitor.pwd@
+  basic:
+    path: ${management.context-path}
+

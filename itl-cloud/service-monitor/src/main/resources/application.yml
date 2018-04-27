@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: service-monitor
+  #profiles:
+  #    active: @environment@
+  boot:
+    admin:
+      username: ${security.user.name}       #These two are needed so that the client
+      password: ${security.user.password}   #can register at the protected server api
+      turbine:
+        clusters: default
+        location: http://localhost:8770/service-turbine
+    client:
+      metadata:
+        user.name: ${security.user.name}         #These two are needed so that the server
+        user.password:  ${security.user.password} #can access the proteceted client endpoints
+
+# tag::configuration-eureka[]
+eureka:  #<1>
+  instance:
+    #使用ip
+    perferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}
+  # eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    leaseRenewalIntervalInSeconds: 10
+  client:
+  #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@localhost:8761/eureka-server/eureka/
+
+
+#management.security.enabled: false  #<2>
+# end::configuration-eureka[]
+
+# tag::configuration-ui-hystrix[]  heapdump,dump,flyway,liquibase,jolokia
+spring.boot.admin.routes.endpoints: env,metrics,info,configprops,trace,refresh,loggers,auditevents,hystrix.stream,turbine.stream,mappings,logfile
+# end::configuration-ui-hystrix[]
+
+
+#security.basic.enabled: false
+
+
+security:
+  user:
+    name: @monitor.user@
+    password: @monitor.pwd@
+  basic:
+    path: ${management.context-path}
+
+server:
+  port: 8081
+  context-path: /service-monitor
+
+
+
